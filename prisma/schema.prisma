@@ -1,0 +1,356 @@
+// Shutterly database schema.
+// Default provider is SQLite for zero-config local development.
+// Swap `provider` to "mysql" or "postgresql" for production — no model changes required.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ---------- AUTH & USERS ----------
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  emailVerified DateTime?
+  name          String?
+  passwordHash  String?
+  role          Role     @default(STUDENT)
+  locale        String   @default("en")
+  themePref     String   @default("system") // light | dark | system
+  avatarUrl     String?
+  bio           String?
+  country       String?  @default("ZA")
+  wpUserId      Int?     @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  sessions      Session[]
+  accounts      Account[]
+  progress      LessonProgress[]
+  enrolments    Enrolment[]
+  submissions   ChallengeSubmission[]
+  badges        BadgeAward[]
+  uploads       MediaAsset[]
+  notifications Notification[]
+  wizardState   AdminWizardState?
+  quizAttempts  QuizAttempt[]
+}
+
+enum Role {
+  STUDENT
+  INSTRUCTOR
+  ADMIN
+  SUPERADMIN
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ---------- COURSE STRUCTURE ----------
+
+model Course {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  subtitle    String?
+  description String
+  level       String   @default("all-levels") // beginner | intermediate | advanced | all-levels
+  coverImage  String?
+  published   Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  modules     Module[]
+  enrolments  Enrolment[]
+  translations CourseTranslation[]
+}
+
+model CourseTranslation {
+  id       String  @id @default(cuid())
+  courseId String
+  locale   String
+  title    String
+  subtitle String?
+  description String
+  course   Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([courseId, locale])
+}
+
+model Module {
+  id        String   @id @default(cuid())
+  courseId  String
+  slug      String
+  title     String
+  summary   String
+  sortOrder Int      @default(0)
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons   Lesson[]
+  translations ModuleTranslation[]
+
+  @@unique([courseId, slug])
+}
+
+model ModuleTranslation {
+  id       String @id @default(cuid())
+  moduleId String
+  locale   String
+  title    String
+  summary  String
+  module   Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@unique([moduleId, locale])
+}
+
+model Lesson {
+  id           String   @id @default(cuid())
+  moduleId     String
+  slug         String
+  title        String
+  summary      String
+  durationMin  Int      @default(8)
+  body         String   // MDX/HTML content
+  heroImage    String?
+  videoUrl     String?
+  interactive  String?  // key referencing an interactive component, e.g. "exposure-triangle"
+  sortOrder    Int      @default(0)
+  module       Module   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  resources    LessonResource[]
+  quiz         Quiz?
+  progress     LessonProgress[]
+  translations LessonTranslation[]
+
+  @@unique([moduleId, slug])
+}
+
+model LessonTranslation {
+  id       String @id @default(cuid())
+  lessonId String
+  locale   String
+  title    String
+  summary  String
+  body     String
+  lesson   Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([lessonId, locale])
+}
+
+model LessonResource {
+  id        String  @id @default(cuid())
+  lessonId  String
+  label     String
+  url       String
+  kind      String  @default("pdf") // pdf | preset | checklist | link
+  lesson    Lesson  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+}
+
+// ---------- QUIZZES ----------
+
+model Quiz {
+  id        String     @id @default(cuid())
+  lessonId  String     @unique
+  passScore Int        @default(70)
+  lesson    Lesson     @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  questions QuizQuestion[]
+  attempts  QuizAttempt[]
+}
+
+model QuizQuestion {
+  id       String   @id @default(cuid())
+  quizId   String
+  prompt   String
+  type     String   @default("single") // single | multi | truefalse
+  options  String   // JSON array of {id,label,correct}
+  explain  String?
+  sortOrder Int     @default(0)
+  quiz     Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+}
+
+model QuizAttempt {
+  id        String   @id @default(cuid())
+  quizId    String
+  userId    String
+  score     Int
+  passed    Boolean
+  answers   String   // JSON
+  createdAt DateTime @default(now())
+  quiz      Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ---------- PROGRESS & ENROLMENT ----------
+
+model Enrolment {
+  id        String   @id @default(cuid())
+  userId    String
+  courseId  String
+  startedAt DateTime @default(now())
+  completedAt DateTime?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+}
+
+model LessonProgress {
+  id          String   @id @default(cuid())
+  userId      String
+  lessonId    String
+  status      String   @default("in_progress") // in_progress | completed
+  percent     Int      @default(0)
+  lastViewedAt DateTime @default(now())
+  completedAt DateTime?
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+}
+
+// ---------- CHALLENGES ----------
+
+model Challenge {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  brief       String
+  cadence     String   @default("weekly") // daily | weekly | featured
+  startsAt    DateTime
+  endsAt      DateTime
+  coverImage  String?
+  rewardBadgeId String?
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  submissions ChallengeSubmission[]
+  rewardBadge Badge? @relation(fields: [rewardBadgeId], references: [id])
+}
+
+model ChallengeSubmission {
+  id          String   @id @default(cuid())
+  challengeId String
+  userId      String
+  mediaId     String
+  caption     String?
+  status      String   @default("submitted") // submitted | featured | flagged | removed
+  likes       Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  challenge   Challenge  @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  media       MediaAsset @relation(fields: [mediaId], references: [id])
+}
+
+// ---------- BADGES ----------
+
+model Badge {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String
+  icon        String   // lucide icon name or url
+  tier        String   @default("bronze") // bronze | silver | gold | platinum
+  awarded     BadgeAward[]
+  challenges  Challenge[]
+}
+
+model BadgeAward {
+  id        String   @id @default(cuid())
+  badgeId   String
+  userId    String
+  awardedAt DateTime @default(now())
+  badge     Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, badgeId])
+}
+
+// ---------- MEDIA / UPLOADS ----------
+
+model MediaAsset {
+  id          String   @id @default(cuid())
+  ownerId     String?
+  driver      String   @default("local") // local | cloudinary | s3 | wordpress
+  url         String
+  thumbUrl    String?
+  filename    String
+  mimeType    String
+  width       Int?
+  height      Int?
+  sizeBytes   Int?
+  exif        String?  // JSON
+  visibility  String   @default("private") // private | public
+  createdAt   DateTime @default(now())
+
+  owner       User?    @relation(fields: [ownerId], references: [id])
+  submissions ChallengeSubmission[]
+}
+
+// ---------- NOTIFICATIONS ----------
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  kind      String   // lesson_unlocked | challenge_new | badge | system
+  title     String
+  body      String
+  readAt    DateTime?
+  link      String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ---------- SITE / ADMIN SETTINGS ----------
+
+model SiteSetting {
+  key   String @id
+  value String // JSON-encoded
+}
+
+model AdminWizardState {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  currentStep Int      @default(0)
+  completed   Boolean  @default(false)
+  dismissedAt DateTime?
+  payload     String   @default("{}") // JSON, per-step answers
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

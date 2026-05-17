@@ -1,0 +1,130 @@
+{
+  "brand": {
+    "name": "Shutterly",
+    "tagline": "Fotografie, op die Suid-Afrikaanse manier.",
+    "blurb": "Leer om lig te sien, stories te raam en 'n portefeulje te bou waarop jy trots is — van die Kaap tot die Karoo, van Kalkbaai tot die kraal."
+  },
+  "nav": {
+    "home": "Tuis",
+    "courses": "Kursusse",
+    "challenges": "Uitdagings",
+    "gallery": "Studente-galery",
+    "dashboard": "Paneelbord",
+    "signin": "Teken in",
+    "signup": "Skep rekening",
+    "signout": "Teken uit",
+    "settings": "Instellings",
+    "profile": "Profiel",
+    "admin": "Admin",
+    "wizard": "Lanseer-towenaar"
+  },
+  "common": {
+    "continue": "Gaan voort",
+    "back": "Terug",
+    "next": "Volgende",
+    "save": "Stoor",
+    "cancel": "Kanselleer",
+    "submit": "Stuur",
+    "loading": "Laai…",
+    "search": "Soek",
+    "language": "Taal",
+    "theme": "Tema",
+    "light": "Lig",
+    "dark": "Donker",
+    "system": "Stelsel",
+    "english": "Engels",
+    "afrikaans": "Afrikaans",
+    "minutes": "min",
+    "completed": "Voltooi",
+    "inProgress": "Aan die gang",
+    "locked": "Gesluit",
+    "comingSoon": "Binnekort",
+    "freeForever": "Gratis, vir altyd"
+  },
+  "marketing": {
+    "heroCtaPrimary": "Begin leer — gratis",
+    "heroCtaSecondary": "Blaai deur die kurrikulum",
+    "trustline": "Geen betaalmuur nie. Geen opverkope nie. Net fotografie wat behoorlik geleer word.",
+    "featureTitle": "Gebou vir makers, nie toerustinglyste nie",
+    "feature1Title": "Stories eerste",
+    "feature1Body": "Elke les leer jou om te sien — nie net 'n knoppie te draai nie. Foto's wat iets beteken, elke keer.",
+    "feature2Title": "Speel, moenie net lees nie",
+    "feature2Body": "Diafragma-, sluiter- en ISO-simulators laat jou belichting voel voor jy 'n kamera oplig.",
+    "feature3Title": "Suid-Afrikaans tot in die hart",
+    "feature3Body": "Voorbeelde geneem van Muizenberg tot Mapungubwe. Lesse in Engels én Afrikaans, langs mekaar.",
+    "feature4Title": "Weeklikse uitdagings",
+    "feature4Body": "Skiet die opdrag, laai jou raam op, verdien kentekens. Die galery is die kurrikulum.",
+    "modulesTitle": "Wat jy gaan leer",
+    "modulesSubtitle": "Agt modules. Regte opdragte. 'n Portefeulje aan die einde.",
+    "testimonialTitle": "Gemaak saam met fotograwe, vir fotograwe",
+    "finalCtaTitle": "Tel die kamera op. Ons doen die res.",
+    "finalCtaBody": "Skep 'n gratis rekening en jou eerste les ontsluit dadelik."
+  },
+  "dashboard": {
+    "welcome": "Welkom terug",
+    "continueLearning": "Gaan voort waar jy opgehou het",
+    "weeklyChallenge": "Hierdie week se uitdaging",
+    "recentLessons": "Onlangs besoek",
+    "uploads": "Jou onlangse oplaaie",
+    "recommended": "Aanbeveel volgende",
+    "stats": {
+      "lessonsDone": "Lesse voltooi",
+      "streak": "Dae-strepe",
+      "badges": "Kentekens verdien",
+      "challenges": "Uitdagings ingedien"
+    },
+    "empty": "Niks hier nie — jou paneelbord vul op soos jy leer."
+  },
+  "lesson": {
+    "tableOfContents": "Op hierdie blad",
+    "markComplete": "Merk as voltooi",
+    "marked": "As voltooi gemerk",
+    "nextLesson": "Volgende les",
+    "prevLesson": "Vorige les",
+    "downloads": "Aflaaie",
+    "tryIt": "Probeer dit",
+    "quiz": "Toets jouself",
+    "yourAnswer": "Jou antwoord",
+    "correct": "Reg op die kol.",
+    "incorrect": "Naby — lees weer."
+  },
+  "challenges": {
+    "title": "Foto-uitdagings",
+    "subtitle": "'n Vars opdrag elke week. Dien jou raam in, verdien die kenteken.",
+    "submit": "Dien 'n foto in",
+    "deadline": "Sluit",
+    "gallery": "Inskrywings",
+    "viewBrief": "Sien opdrag",
+    "uploadHint": "JPG of PNG tot {max} MB.",
+    "captionLabel": "Onderskrif (opsioneel)",
+    "submitted": "Ingedien — mooi geskiet."
+  },
+  "auth": {
+    "signinTitle": "Teken in by Shutterly",
+    "signupTitle": "Skep jou gratis rekening",
+    "forgotTitle": "Stel jou wagwoord terug",
+    "email": "E-posadres",
+    "password": "Wagwoord",
+    "confirmPassword": "Bevestig wagwoord",
+    "name": "Volle naam",
+    "haveAccount": "Het reeds 'n rekening?",
+    "noAccount": "Nuut by Shutterly?",
+    "forgot": "Wagwoord vergeet?",
+    "agreeTerms": "Ek stem in tot die gebruiksvoorwaardes en privaatheidsbeleid.",
+    "checkInbox": "Kyk jou inkassie vir 'n terugstel-skakel."
+  },
+  "wizard": {
+    "title": "Shutterly Lanseer-towenaar",
+    "subtitle": "'n Privaat kontrolelys wat jou van leë lei tot lanseerdag stap-vir-stap lei.",
+    "stepXofY": "Stap {x} van {y}",
+    "percentComplete": "{percent}% voltooi",
+    "warnIncomplete": "Sommige stappe is nog uitstaande. Voltooi dit voor jy publiseer.",
+    "buttons": {
+      "next": "Volgende stap",
+      "prev": "Vorige",
+      "skip": "Slaan vir nou oor",
+      "finish": "Merk opstelling as voltooi",
+      "dismiss": "Verwerp towenaar"
+    }
+  }
+}

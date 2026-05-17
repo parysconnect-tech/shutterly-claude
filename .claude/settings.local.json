@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir \"C:\\\\Users\\\\elmar\\\\Shutterly Claude\")",
+      "PowerShell(Test-Path \"C:\\\\Users\\\\elmar\\\\Shutterly Claude\"; \\(Get-ChildItem \"C:\\\\Users\\\\elmar\\\\Shutterly Claude\" -ErrorAction SilentlyContinue | Measure-Object\\).Count)"
+    ]
+  }
+}

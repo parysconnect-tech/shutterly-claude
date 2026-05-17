@@ -1,0 +1,14 @@
+node_modules
+.next
+out
+.env
+.env.local
+.DS_Store
+*.log
+prisma/*.db
+prisma/*.db-journal
+public/uploads/*
+!public/uploads/.gitkeep
+.vercel
+.turbo
+coverage

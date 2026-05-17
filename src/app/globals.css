@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --background: 36 33% 98%;
+  --foreground: 24 30% 8%;
+  --muted: 32 20% 94%;
+  --muted-fg: 24 8% 38%;
+  --card: 0 0% 100%;
+  --card-fg: 24 30% 8%;
+  --border: 30 14% 88%;
+  --ring: 26 96% 49%;
+}
+
+.dark {
+  --background: 220 18% 7%;
+  --foreground: 30 30% 96%;
+  --muted: 220 14% 13%;
+  --muted-fg: 30 10% 70%;
+  --card: 220 18% 10%;
+  --card-fg: 30 30% 96%;
+  --border: 220 14% 18%;
+  --ring: 26 96% 60%;
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+html, body {
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Selection */
+::selection {
+  background: hsl(var(--ring) / 0.3);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted));
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover { background: hsl(var(--muted-fg) / 0.4); }
+
+@layer components {
+  .container-narrow { @apply max-w-3xl mx-auto px-4; }
+  .container-wide { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8; }
+
+  .heading-display {
+    @apply font-display font-semibold tracking-tight;
+    font-feature-settings: 'ss01', 'ss02';
+  }
+
+  .prose-shutterly {
+    @apply prose-headings:font-display prose-headings:tracking-tight
+           prose-p:leading-relaxed prose-a:text-brand-600 hover:prose-a:text-brand-700
+           dark:prose-a:text-brand-300 dark:hover:prose-a:text-brand-200
+           prose-strong:text-foreground prose-li:my-1;
+  }
+
+  .ring-focus {
+    @apply outline-none ring-2 ring-offset-2 ring-offset-background ring-brand-500;
+  }
+
+  .glass {
+    background: linear-gradient(to bottom right, hsl(var(--card) / 0.7), hsl(var(--card) / 0.4));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--border));
+  }
+
+  .shimmer {
+    background: linear-gradient(90deg,
+      hsl(var(--muted)) 0%,
+      hsl(var(--muted-fg) / 0.15) 50%,
+      hsl(var(--muted)) 100%);
+    background-size: 200% 100%;
+    @apply animate-shine;
+  }
+}
+
+/* Print-friendly */
+@media print {
+  .no-print { display: none !important; }
+}

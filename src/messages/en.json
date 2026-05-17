@@ -1,0 +1,130 @@
+{
+  "brand": {
+    "name": "Shutterly",
+    "tagline": "Photography, the South African way.",
+    "blurb": "Learn to see light, frame stories and build a portfolio you're proud of — from the Cape to the Karoo, the kalkbaai to the kraal."
+  },
+  "nav": {
+    "home": "Home",
+    "courses": "Courses",
+    "challenges": "Challenges",
+    "gallery": "Student Gallery",
+    "dashboard": "Dashboard",
+    "signin": "Sign in",
+    "signup": "Create account",
+    "signout": "Sign out",
+    "settings": "Settings",
+    "profile": "Profile",
+    "admin": "Admin",
+    "wizard": "Launch wizard"
+  },
+  "common": {
+    "continue": "Continue",
+    "back": "Back",
+    "next": "Next",
+    "save": "Save",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "loading": "Loading…",
+    "search": "Search",
+    "language": "Language",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "english": "English",
+    "afrikaans": "Afrikaans",
+    "minutes": "min",
+    "completed": "Completed",
+    "inProgress": "In progress",
+    "locked": "Locked",
+    "comingSoon": "Coming soon",
+    "freeForever": "Free, forever"
+  },
+  "marketing": {
+    "heroCtaPrimary": "Start learning — free",
+    "heroCtaSecondary": "Browse the curriculum",
+    "trustline": "No paywall. No upsell. Just photography taught properly.",
+    "featureTitle": "Built for makers, not gear lists",
+    "feature1Title": "Story-first lessons",
+    "feature1Body": "Every lesson teaches you to see — not just to set a dial. Photographs that mean something, every time.",
+    "feature2Title": "Play, don't just read",
+    "feature2Body": "Aperture, shutter and ISO simulators let you feel exposure before you ever lift a camera.",
+    "feature3Title": "South African at the core",
+    "feature3Body": "Examples shot from Muizenberg to Mapungubwe. Lessons in English and Afrikaans, side by side.",
+    "feature4Title": "Weekly challenges",
+    "feature4Body": "Shoot the brief, upload your frame, earn badges. The gallery is the syllabus.",
+    "modulesTitle": "What you'll learn",
+    "modulesSubtitle": "Eight modules. Real briefs. A portfolio at the end of it.",
+    "testimonialTitle": "Made with photographers, for photographers",
+    "finalCtaTitle": "Pick up the camera. We'll do the rest.",
+    "finalCtaBody": "Create a free account and your first lesson is unlocked instantly."
+  },
+  "dashboard": {
+    "welcome": "Welcome back",
+    "continueLearning": "Continue where you left off",
+    "weeklyChallenge": "This week's challenge",
+    "recentLessons": "Recently viewed",
+    "uploads": "Your recent uploads",
+    "recommended": "Recommended next",
+    "stats": {
+      "lessonsDone": "Lessons completed",
+      "streak": "Day streak",
+      "badges": "Badges earned",
+      "challenges": "Challenges submitted"
+    },
+    "empty": "Nothing here yet — your dashboard fills up as you learn."
+  },
+  "lesson": {
+    "tableOfContents": "On this page",
+    "markComplete": "Mark complete",
+    "marked": "Marked complete",
+    "nextLesson": "Next lesson",
+    "prevLesson": "Previous lesson",
+    "downloads": "Downloads",
+    "tryIt": "Try it",
+    "quiz": "Check yourself",
+    "yourAnswer": "Your answer",
+    "correct": "Spot on.",
+    "incorrect": "Close — read again."
+  },
+  "challenges": {
+    "title": "Photo challenges",
+    "subtitle": "A fresh brief every week. Submit your frame, earn the badge.",
+    "submit": "Submit a photo",
+    "deadline": "Closes",
+    "gallery": "Submissions",
+    "viewBrief": "View brief",
+    "uploadHint": "JPG or PNG up to {max} MB.",
+    "captionLabel": "Caption (optional)",
+    "submitted": "Submitted — well shot."
+  },
+  "auth": {
+    "signinTitle": "Sign in to Shutterly",
+    "signupTitle": "Create your free account",
+    "forgotTitle": "Reset your password",
+    "email": "Email address",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "name": "Full name",
+    "haveAccount": "Already have an account?",
+    "noAccount": "New to Shutterly?",
+    "forgot": "Forgot password?",
+    "agreeTerms": "I agree to the terms of use and privacy policy.",
+    "checkInbox": "Check your inbox for a reset link."
+  },
+  "wizard": {
+    "title": "Shutterly Launch Wizard",
+    "subtitle": "A private checklist that walks you from blank slate to launch day.",
+    "stepXofY": "Step {x} of {y}",
+    "percentComplete": "{percent}% complete",
+    "warnIncomplete": "Some steps are still missing. Finish them before you publish.",
+    "buttons": {
+      "next": "Next step",
+      "prev": "Previous",
+      "skip": "Skip for now",
+      "finish": "Mark setup complete",
+      "dismiss": "Dismiss wizard"
+    }
+  }
+}
