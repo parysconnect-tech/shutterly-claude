@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lesson · Shutterly</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@500;600;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body style="display:flex; flex-direction:column; min-height:100vh;">
+  <div data-header></div>
+
+  <div class="app-layout" style="flex:1;">
+    <aside class="lesson-sidebar" id="lesson-sidebar"></aside>
+    <main style="flex:1; padding:24px 16px;" id="lesson-root"></main>
+  </div>
+
+  <div data-footer></div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="assets/js/interactives.js"></script>
+  <script>
+    (function () {
+      const params = new URLSearchParams(location.search);
+      const courseSlug = params.get('course') || 'see-like-a-photographer';
+      const moduleSlug = params.get('module');
+      const lessonSlug = params.get('lesson');
+      const locale = window.Shutterly.Locale.get();
+      const course = window.Shutterly.getCourse(courseSlug);
+      const module = course && window.Shutterly.getModule(courseSlug, moduleSlug);
+      const lesson = module && window.Shutterly.getLesson(courseSlug, moduleSlug, lessonSlug);
+      const root = document.getElementById('lesson-root');
+      const sidebar = document.getElementById('lesson-sidebar');
+
+      if (!lesson) {
+        root.innerHTML = '<h1 class="heading-display text-3xl">Lesson not found</h1><p><a href="courses.html">← Back to courses</a></p>';
+        return;
+      }
+
+      // Sidebar
+      const session = window.Shutterly.Auth.getSession();
+      const userId = session?.userId || 'anonymous';
+      const progress = window.Shutterly.Progress.forUser(userId);
+      const flat = window.Shutterly.flatLessons(courseSlug);
+
+      sidebar.innerHTML = `
+        <div class="lesson-sidebar-header">${course.title[locale]}</div>
+        <nav class="lesson-sidebar-nav">
+          ${course.modules.map((m, mi) => `
+            <div>
+              <p class="lesson-sidebar-module-label">${String(mi + 1).padStart(2, '0')} · ${m.title[locale]}</p>
+              ${m.lessons.map(l => {
+                const key = m.slug + '/' + l.slug;
+                const active = m.slug === moduleSlug && l.slug === lessonSlug;
+                const done = progress[key]?.status === 'completed';
+                return `
+                  <a href="lesson.html?course=${course.slug}&module=${m.slug}&lesson=${l.slug}"
+                     class="lesson-sidebar-link ${active ? 'active' : ''}">
+                    <span class="lesson-status ${done ? 'done' : ''}"></span>
+                    <span>
+                      ${l.title[locale]}
+                      <span style="display:block; font-size:10px; color:var(--muted-fg); margin-top:2px;">${l.durationMin} min</span>
+                    </span>
+                  </a>`;
+              }).join('')}
+            </div>
+          `).join('')}
+        </nav>
+      `;
+
+      // Breadcrumbs + header
+      const idx = flat.findIndex(x => x.module.slug === moduleSlug && x.lesson.slug === lessonSlug);
+      const prev = flat[idx - 1], next = flat[idx + 1];
+
+      root.innerHTML = `
+        <nav class="text-xs text-muted flex flex-wrap gap-1 items-center">
+          <a href="courses.html">Courses</a>
+          <span>›</span>
+          <a href="course.html?slug=${course.slug}">${course.title[locale]}</a>
+          <span>›</span>
+          <span>${module.title[locale]}</span>
+          <span>›</span>
+          <span style="color:var(--foreground)">${lesson.title[locale]}</span>
+        </nav>
+
+        <header style="margin-top:16px;">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="badge badge-brand">${module.title[locale]}</span>
+            <span class="badge badge-default">⏱ ${lesson.durationMin} min</span>
+          </div>
+          <h1 class="heading-display text-4xl leading-tight" style="margin-top:16px;">${lesson.title[locale]}</h1>
+          <p class="text-muted" style="margin-top:8px;">${lesson.summary[locale]}</p>
+        </header>
+
+        <div class="prose" style="margin-top:32px;" id="lesson-body"></div>
+
+        ${lesson.interactive ? `
+          <div style="margin:32px 0;">
+            <span class="badge badge-accent" style="margin-bottom:12px;">Try it</span>
+            <div id="lesson-interactive"></div>
+          </div>` : ''}
+
+        ${lesson.quiz ? '<div style="margin:32px 0;" id="lesson-quiz"></div>' : ''}
+
+        <div style="margin-top:48px; padding-top:24px; border-top:1px solid var(--border); display:flex; flex-direction:column; sm:flex-direction:row; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;">
+          <button id="mark-complete-btn" class="btn btn-primary">✓ Mark complete</button>
+          <div style="display:flex; gap:8px;">
+            ${prev ? `<a class="btn btn-outline" href="lesson.html?course=${course.slug}&module=${prev.module.slug}&lesson=${prev.lesson.slug}">← Previous</a>` : ''}
+            ${next ? `<a class="btn btn-primary" href="lesson.html?course=${course.slug}&module=${next.module.slug}&lesson=${next.lesson.slug}">Next →</a>` : ''}
+          </div>
+        </div>
+      `;
+
+      document.getElementById('lesson-body').innerHTML = window.Shutterly.renderMarkdown(lesson.body[locale]);
+
+      if (lesson.interactive) {
+        const host = document.getElementById('lesson-interactive');
+        window.ShutterlyInteractive(lesson.interactive, host);
+      }
+
+      // Quiz
+      if (lesson.quiz) {
+        renderQuiz(lesson.quiz, document.getElementById('lesson-quiz'));
+      }
+
+      // Mark complete
+      document.getElementById('mark-complete-btn').addEventListener('click', () => {
+        const key = moduleSlug + '/' + lessonSlug;
+        window.Shutterly.Progress.setLesson(userId, key, { status: 'completed', percent: 100 });
+        window.Shutterly.toast('Lesson saved as complete.', 'success');
+        // refresh sidebar checkmark
+        location.reload();
+      });
+
+      function renderQuiz(spec, host) {
+        const locale = window.Shutterly.Locale.get();
+        host.innerHTML = `
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Check yourself</h3>
+              <p class="card-description">Pass at ${spec.passScore}% or better.</p>
+            </div>
+            <div class="card-content" id="quiz-body"></div>
+          </div>`;
+        const body = host.querySelector('#quiz-body');
+        const answers = {};
+        let submitted = false;
+
+        function draw() {
+          body.innerHTML = '';
+          spec.questions.forEach((q, qi) => {
+            const wrap = document.createElement('div');
+            wrap.style.marginBottom = '20px';
+            wrap.innerHTML = `<p style="font-weight:500;">${qi + 1}. ${q.prompt[locale]}</p>`;
+            const opts = document.createElement('div');
+            opts.className = 'grid sm:grid-cols-2 gap-2';
+            opts.style.marginTop = '8px';
+            q.options.forEach((opt, oi) => {
+              const picked = answers[qi] === oi;
+              const reveal = submitted;
+              const correct = !!opt.correct;
+              const btn = document.createElement('button');
+              btn.className = 'card';
+              btn.style.cssText = 'padding:10px 14px; text-align:left; font-size:14px; cursor:pointer; transition:all 0.15s;';
+              if (picked && !reveal) btn.style.borderColor = 'var(--brand-500)';
+              if (reveal && correct) { btn.style.borderColor = 'var(--success)'; btn.style.background = 'rgba(22,163,74,0.1)'; }
+              if (reveal && picked && !correct) { btn.style.borderColor = 'var(--danger)'; btn.style.background = 'rgba(239,68,68,0.1)'; }
+              btn.textContent = (reveal && correct ? '✓ ' : reveal && picked && !correct ? '✗ ' : '○ ') + opt.label[locale];
+              btn.addEventListener('click', () => {
+                if (!submitted) { answers[qi] = oi; draw(); }
+              });
+              opts.appendChild(btn);
+            });
+            wrap.appendChild(opts);
+            if (submitted && q.explain) {
+              const ex = document.createElement('p');
+              ex.className = 'text-xs text-muted';
+              ex.style.marginTop = '8px';
+              ex.textContent = q.explain[locale];
+              wrap.appendChild(ex);
+            }
+            body.appendChild(wrap);
+          });
+          const correctCount = spec.questions.reduce((acc, q, i) =>
+            answers[i] != null && q.options[answers[i]]?.correct ? acc + 1 : acc, 0);
+          const score = Math.round((correctCount / spec.questions.length) * 100);
+          const passed = score >= spec.passScore;
+
+          const footer = document.createElement('div');
+          footer.style.cssText = 'display:flex; justify-content:space-between; align-items:center; gap:12px; padding-top:8px;';
+          if (submitted) {
+            footer.innerHTML = `<span class="badge ${passed ? 'badge-success' : 'badge-danger'}">${passed ? '✓ ' + window.Shutterly.Locale.t('lesson.correct') : '✗ ' + window.Shutterly.Locale.t('lesson.incorrect')} — ${score}%</span>`;
+            const again = document.createElement('button');
+            again.className = 'btn btn-outline';
+            again.textContent = 'Try again';
+            again.addEventListener('click', () => { submitted = false; Object.keys(answers).forEach(k => delete answers[k]); draw(); });
+            footer.appendChild(again);
+          } else {
+            const left = document.createElement('span');
+            left.className = 'text-sm text-muted';
+            left.textContent = `Answered ${Object.keys(answers).length} / ${spec.questions.length}`;
+            footer.appendChild(left);
+            const submitBtn = document.createElement('button');
+            submitBtn.className = 'btn btn-primary';
+            submitBtn.textContent = 'Submit answers';
+            submitBtn.addEventListener('click', () => { submitted = true; draw(); });
+            footer.appendChild(submitBtn);
+          }
+          body.appendChild(footer);
+        }
+        draw();
+      }
+    })();
+  </script>
+</body>
+</html>

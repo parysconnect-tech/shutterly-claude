@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Settings · Shutterly</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div data-header></div>
+  <main class="container-narrow" style="padding:48px 16px;">
+    <h1 class="heading-display text-3xl">Settings</h1>
+
+    <div class="card" style="margin-top:24px;">
+      <div class="card-header"><h3 class="card-title">Theme</h3><p class="card-description">Light, dark, or follow your system.</p></div>
+      <div class="card-content">
+        <div class="theme-toggle" id="theme-row">
+          <button data-theme="light">☀</button>
+          <button data-theme="system">⊡</button>
+          <button data-theme="dark">☾</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-header"><h3 class="card-title">Language</h3><p class="card-description">English or Afrikaans.</p></div>
+      <div class="card-content">
+        <div class="locale-switcher" id="lang-row">
+          <button data-locale="en">EN</button>
+          <button data-locale="af">AF</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-header"><h3 class="card-title">Your data</h3><p class="card-description">In this static version, everything lives in your browser.</p></div>
+      <div class="card-content" style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button class="btn btn-outline" id="export-btn">Export all my data</button>
+        <button class="btn btn-danger" id="clear-btn">Clear all my data</button>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px; border-left:3px solid var(--brand-500);">
+      <div class="card-header"><h3 class="card-title">Want a real database?</h3><p class="card-description">When you outgrow the browser-only setup.</p></div>
+      <div class="card-content">
+        <p class="text-sm">This static version is great for a demo or a single learner. When you have multiple students, want password recovery, or need to persist photo uploads — switch to the Next.js + database version that ships in the parent folder.</p>
+        <a class="btn btn-primary" style="margin-top:12px;" href="admin-wizard.html">Open the Launch Wizard → see "Upgrade Path"</a>
+      </div>
+    </div>
+  </main>
+  <div data-footer></div>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    const T = window.Shutterly.Theme;
+    const L = window.Shutterly.Locale;
+    function paintTheme() {
+      document.querySelectorAll('#theme-row button').forEach(b => b.classList.toggle('active', b.dataset.theme === T.get()));
+    }
+    function paintLang() {
+      document.querySelectorAll('#lang-row button').forEach(b => b.classList.toggle('active', b.dataset.locale === L.get()));
+    }
+    paintTheme(); paintLang();
+    document.querySelectorAll('#theme-row button').forEach(b => b.addEventListener('click', () => { T.set(b.dataset.theme); paintTheme(); }));
+    document.querySelectorAll('#lang-row button').forEach(b => b.addEventListener('click', () => L.set(b.dataset.locale)));
+
+    document.getElementById('export-btn').addEventListener('click', () => {
+      const data = {
+        users: JSON.parse(localStorage.getItem('shutterly:users') || '[]'),
+        progress: JSON.parse(localStorage.getItem('shutterly:progress') || '{}'),
+        submissions: JSON.parse(localStorage.getItem('shutterly:submissions') || '[]'),
+        settings: JSON.parse(localStorage.getItem('shutterly:settings') || '{}'),
+        wizard: JSON.parse(localStorage.getItem('shutterly:wizard') || '{}'),
+        exportedAt: new Date().toISOString()
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'shutterly-export-' + Date.now() + '.json';
+      a.click();
+      window.Shutterly.toast('Exported.', 'success');
+    });
+    document.getElementById('clear-btn').addEventListener('click', () => {
+      if (!confirm('This wipes all Shutterly data in this browser. Sure?')) return;
+      ['shutterly:users','shutterly:progress','shutterly:submissions','shutterly:settings','shutterly:wizard','shutterly:session','shutterly:theme','shutterly:locale']
+        .forEach(k => localStorage.removeItem(k));
+      window.Shutterly.toast('Cleared. Reloading…', 'success');
+      setTimeout(() => location.href = 'index.html', 600);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard · Shutterly</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body style="display:flex; flex-direction:column; min-height:100vh;">
+  <div data-header></div>
+  <div style="display:flex; flex:1;">
+    <aside class="sidebar">
+      <nav id="student-nav"></nav>
+    </aside>
+    <main style="flex:1; padding:32px 24px;" id="dash-root"></main>
+  </div>
+  <div data-footer></div>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    (function () {
+      const session = window.Shutterly.Auth.getSession();
+      if (!session) { location.href = 'signin.html?next=dashboard.html'; return; }
+      const t = (k) => window.Shutterly.Locale.t(k);
+      const locale = window.Shutterly.Locale.get();
+      const I = window.Shutterly.ICONS;
+
+      // Sidebar
+      const nav = document.getElementById('student-nav');
+      const path = location.pathname.split('/').pop();
+      const items = [
+        { href: 'dashboard.html', icon: I.home, label: t('nav.dashboard') },
+        { href: 'courses.html', icon: I.book, label: t('nav.courses') },
+        { href: 'challenges.html', icon: I.trophy, label: t('nav.challenges') },
+        { href: 'gallery.html', icon: I.images, label: t('nav.gallery') },
+        { href: 'profile.html', icon: I.user, label: t('nav.profile') },
+        { href: 'settings.html', icon: I.settings, label: t('nav.settings') }
+      ];
+      const wizDismissed = (function () {
+        try { return !!JSON.parse(localStorage.getItem('shutterly:wizard')||'{}').dismissed; } catch { return false; }
+      })();
+      if ((session.role === 'ADMIN' || session.role === 'SUPERADMIN') && !wizDismissed) {
+        items.push({ href: 'admin.html', icon: I.shield, label: t('nav.admin') });
+      }
+      items.forEach(it => {
+        const a = document.createElement('a');
+        a.href = it.href;
+        if (it.href === path) a.classList.add('active');
+        a.innerHTML = it.icon + '<span>' + it.label + '</span>';
+        nav.appendChild(a);
+      });
+
+      // Stats
+      const userId = session.userId;
+      const progress = window.Shutterly.Progress.forUser(userId);
+      const course = window.SHUTTERLY_DATA.courses[0];
+      const total = window.Shutterly.totalLessons(course.slug);
+      const completed = window.Shutterly.Progress.countCompleted(userId);
+      const pct = Math.round((completed / Math.max(1, total)) * 100);
+      const submissions = window.Shutterly.Submissions.forUser(userId).length;
+      const challenge = window.SHUTTERLY_DATA.challenges[0];
+      const recommended = window.Shutterly.flatLessons(course.slug)[Math.min(completed, total - 1)];
+      const recent = window.Shutterly.Progress.recent(userId, 3);
+
+      // Continue link: most recent in-progress lesson, else first
+      let continueModule = course.modules[0].slug;
+      let continueLesson = course.modules[0].lessons[0].slug;
+      if (recent[0]) {
+        const [m, l] = recent[0].key.split('/');
+        continueModule = m; continueLesson = l;
+      }
+
+      const root = document.getElementById('dash-root');
+      root.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:12px;">
+          <div>
+            <p class="text-sm text-muted">${t('dashboard.welcome')},</p>
+            <h1 class="heading-display text-4xl">${(session.name || 'Photographer').split(' ')[0]}.</h1>
+          </div>
+          <span class="badge badge-brand">${I.sparkles} ${pct}% of course done</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" style="margin-top:32px;">
+          ${stat(I.book, t('dashboard.lessonsDone'), completed + '/' + total)}
+          ${stat(I.flame, t('dashboard.streak'), '3')}
+          ${stat(I.trophy, t('dashboard.badges'), '0')}
+          ${stat(I.camera, t('dashboard.challenges'), String(submissions))}
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-4" style="margin-top:32px;">
+          <div class="card" style="overflow:hidden;" id="continue-card">
+            <div style="height:160px; position:relative; background:linear-gradient(to right, var(--brand-400), var(--brand-600));">
+              <img src="${course.coverImage}" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; mix-blend-mode:overlay; opacity:0.7;">
+              <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.7), transparent);"></div>
+              <div style="position:relative; z-index:1; padding:24px; color:white;">
+                <p class="text-xs uppercase tracking-wider" style="opacity:0.8;">${t('dashboard.continueLearning')}</p>
+                <h2 class="heading-display text-2xl" style="margin-top:6px;">${course.title[locale]}</h2>
+              </div>
+            </div>
+            <div class="card-content">
+              <div style="display:flex; gap:16px; align-items:center; justify-content:space-between;">
+                <div style="flex:1;"><div class="progress"><div class="progress-bar" style="width:${pct}%;"></div></div></div>
+                <a class="btn btn-primary btn-sm" href="lesson.html?course=${course.slug}&module=${continueModule}&lesson=${continueLesson}">${t('common.continue')} →</a>
+              </div>
+
+              <div class="grid sm:grid-cols-2 gap-3" style="margin-top:16px;">
+                ${recommended ? `
+                  <div class="card bg-muted-40" style="padding:14px;">
+                    <p class="text-xs uppercase tracking-wider text-muted">${t('dashboard.recommended')}</p>
+                    <p class="heading-display text-lg leading-tight" style="margin-top:6px;">${recommended.lesson.title[locale]}</p>
+                    <a href="lesson.html?course=${course.slug}&module=${recommended.module.slug}&lesson=${recommended.lesson.slug}" class="text-sm text-brand" style="margin-top:6px; display:inline-block;">Start →</a>
+                  </div>` : ''}
+                <div class="card bg-muted-40" style="padding:14px;">
+                  <p class="text-xs uppercase tracking-wider text-muted">${t('dashboard.recentLessons')}</p>
+                  <ul style="margin-top:6px; font-size:13px;">
+                    ${recent.length ? recent.map(r => `<li class="flex justify-between"><span class="line-clamp-1">${r.key}</span><span class="text-muted">${r.percent || 0}%</span></li>`).join('') :
+                      `<li class="text-muted">${t('dashboard.empty')}</li>`}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="overflow:hidden;">
+            <div class="card-header">
+              <span class="badge badge-accent" style="margin-bottom:8px;">${t('dashboard.weeklyChallenge')}</span>
+              <h3 class="card-title">${challenge.title[locale]}</h3>
+              <p class="card-description">${challenge.brief[locale]}</p>
+            </div>
+            <div class="card-content">
+              <a class="btn btn-secondary" style="width:100%;" href="challenge.html?slug=${challenge.slug}">${t('challenges.viewBrief')}</a>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:48px;">
+          <h2 class="heading-display text-2xl" style="margin-bottom:16px;">Modules in ${course.title[locale]}</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            ${course.modules.map((m, i) => `
+              <a class="card card-hover" style="padding:16px;" href="lesson.html?course=${course.slug}&module=${m.slug}&lesson=${m.lessons[0].slug}">
+                <span class="badge badge-brand">${String(i+1).padStart(2,'0')}</span>
+                <p class="heading-display" style="margin-top:8px; font-size:15px;">${m.title[locale]}</p>
+                <p class="text-xs text-muted line-clamp-2" style="margin-top:4px;">${m.summary[locale]}</p>
+              </a>`).join('')}
+          </div>
+        </div>
+      `;
+
+      function stat(icon, label, value) {
+        return `
+          <div class="card">
+            <div class="card-content" style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <p class="text-xs uppercase tracking-wider text-muted">${label}</p>
+                <p class="heading-display text-2xl" style="margin-top:6px;">${value}</p>
+              </div>
+              <span style="color:var(--brand-500)">${icon}</span>
+            </div>
+          </div>`;
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Course · Shutterly</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div data-header></div>
+  <main class="container-wide" style="padding:48px 0;" id="course-root"></main>
+  <div data-footer></div>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const slug = params.get('slug') || 'see-like-a-photographer';
+    const course = window.Shutterly.getCourse(slug);
+    const root = document.getElementById('course-root');
+    const locale = window.Shutterly.Locale.get();
+    if (!course) {
+      root.innerHTML = '<h1 class="heading-display text-3xl">Course not found</h1><p><a href="courses.html">← Back to courses</a></p>';
+    } else {
+      const firstLesson = course.modules[0].lessons[0];
+      const total = course.modules.reduce((a, m) => a + m.lessons.length, 0);
+      root.innerHTML = `
+        <div class="grid sm:grid-cols-2 gap-8 items-end" style="margin-bottom:48px;">
+          <div>
+            <span class="badge badge-brand">${course.level}</span>
+            <h1 class="heading-display text-5xl leading-tight" style="margin-top:12px;">${course.title[locale]}</h1>
+            <p class="text-lg text-muted" style="margin-top:12px;">${course.subtitle[locale]}</p>
+            <p class="text-muted" style="margin-top:16px;">${course.description[locale]}</p>
+            <a class="btn btn-primary btn-lg" style="margin-top:24px;" href="lesson.html?course=${course.slug}&module=${course.modules[0].slug}&lesson=${firstLesson.slug}">
+              Start lesson 1 →
+            </a>
+          </div>
+          <div class="aspect-4-3" style="border-radius:24px; overflow:hidden;">
+            <img src="${course.coverImage}" alt="" style="width:100%; height:100%; object-fit:cover;">
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          ${course.modules.map((m, i) => `
+            <div class="card">
+              <div class="card-content">
+                <div class="flex justify-between items-start gap-4 flex-wrap">
+                  <div>
+                    <span class="badge badge-brand">${String(i + 1).padStart(2, '0')}</span>
+                    <h2 class="heading-display text-2xl" style="margin-top:10px;">${m.title[locale]}</h2>
+                    <p class="text-muted" style="margin-top:6px;">${m.summary[locale]}</p>
+                  </div>
+                  <a class="btn btn-outline btn-sm" href="lesson.html?course=${course.slug}&module=${m.slug}&lesson=${m.lessons[0].slug}">Open</a>
+                </div>
+                <ul style="margin-top:16px; border:1px solid var(--border); border-radius:12px; overflow:hidden;">
+                  ${m.lessons.map((l, j) => `
+                    <li style="padding:10px 14px; border-top: ${j === 0 ? '0' : '1px solid var(--border)'}; display:flex; justify-content:space-between; align-items:center; gap:8px; font-size:14px;">
+                      <a href="lesson.html?course=${course.slug}&module=${m.slug}&lesson=${l.slug}" style="flex:1;">
+                        <span class="font-mono text-xs text-muted" style="margin-right:12px;">${String(j + 1).padStart(2, '0')}</span>
+                        ${l.title[locale]}
+                      </a>
+                      <span class="text-xs text-muted">${l.durationMin} min</span>
+                    </li>
+                  `).join('')}
+                </ul>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>

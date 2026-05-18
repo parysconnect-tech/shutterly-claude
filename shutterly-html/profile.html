@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Profile · Shutterly</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div data-header></div>
+  <main class="container-narrow" style="padding:48px 16px;" id="profile-root"></main>
+  <div data-footer></div>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    (function () {
+      const session = window.Shutterly.Auth.getSession();
+      if (!session) { location.href = 'signin.html?next=profile.html'; return; }
+      const root = document.getElementById('profile-root');
+      const userId = session.userId;
+      const completed = window.Shutterly.Progress.countCompleted(userId);
+      const submissions = window.Shutterly.Submissions.forUser(userId).length;
+      const initial = (session.name || session.email).charAt(0).toUpperCase();
+
+      root.innerHTML = `
+        <div class="card">
+          <div class="card-content" style="display:flex; gap:16px; align-items:center;">
+            <div style="width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg, var(--brand-400), var(--brand-600)); color:white; font-family:var(--font-display); font-size:32px; display:flex; align-items:center; justify-content:center;">${initial}</div>
+            <div>
+              <h1 class="heading-display text-2xl">${session.name || 'You'}</h1>
+              <p class="text-sm text-muted">${session.email}</p>
+              <div style="display:flex; gap:8px; margin-top:8px;">
+                <span class="badge badge-brand">${session.role}</span>
+                <span class="badge badge-default">${window.Shutterly.Locale.get().toUpperCase()}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid sm:grid-cols-3 gap-4" style="margin-top:16px;">
+          ${stat('📚', 'Lessons', completed)}
+          ${stat('📷', 'Submissions', submissions)}
+          ${stat('🏆', 'Badges', 0)}
+        </div>
+
+        <div class="card" style="margin-top:16px;">
+          <div class="card-header">
+            <h3 class="card-title">Badges</h3>
+            <p class="card-description">Earned by completing lessons and challenges.</p>
+          </div>
+          <div class="card-content">
+            <p class="text-sm text-muted">No badges yet — finish your first lesson to earn one.</p>
+          </div>
+        </div>
+      `;
+
+      function stat(emoji, label, value) {
+        return `
+          <div class="card">
+            <div class="card-content" style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <p class="text-xs uppercase tracking-wider text-muted">${label}</p>
+                <p class="heading-display text-2xl" style="margin-top:4px;">${value}</p>
+              </div>
+              <span style="font-size:24px;">${emoji}</span>
+            </div>
+          </div>`;
+      }
+    })();
+  </script>
+</body>
+</html>

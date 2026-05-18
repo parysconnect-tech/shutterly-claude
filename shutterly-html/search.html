@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Search · Shutterly</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div data-header></div>
+  <main class="container-narrow" style="padding:48px 16px;">
+    <h1 class="heading-display text-4xl">Search</h1>
+    <div class="field" style="margin-top:24px;">
+      <input id="q" class="input" placeholder="aperture, golden hour, portfolio…" autofocus style="height:48px; font-size:15px;">
+    </div>
+    <div id="hits" style="margin-top:24px; display:flex; flex-direction:column; gap:12px;"></div>
+  </main>
+  <div data-footer></div>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    const locale = window.Shutterly.Locale.get();
+    const all = [];
+    window.SHUTTERLY_DATA.courses.forEach(c => {
+      c.modules.forEach(m => {
+        m.lessons.forEach(l => {
+          all.push({
+            title: l.title[locale],
+            summary: l.summary[locale],
+            href: `lesson.html?course=${c.slug}&module=${m.slug}&lesson=${l.slug}`
+          });
+        });
+      });
+    });
+    const hits = document.getElementById('hits');
+    function draw(q) {
+      const matches = q ?
+        all.filter(x => x.title.toLowerCase().includes(q.toLowerCase()) || x.summary.toLowerCase().includes(q.toLowerCase())) :
+        all.slice(0, 10);
+      hits.innerHTML = matches.length ? matches.map(h => `
+        <a class="card card-hover" href="${h.href}">
+          <div class="card-content">
+            <p class="heading-display text-lg">${h.title}</p>
+            <p class="text-sm text-muted line-clamp-2" style="margin-top:4px;">${h.summary}</p>
+          </div>
+        </a>`).join('') : '<p class="text-sm text-muted">No matches. Try a wider word.</p>';
+    }
+    draw('');
+    document.getElementById('q').addEventListener('input', e => draw(e.target.value));
+  </script>
+</body>
+</html>

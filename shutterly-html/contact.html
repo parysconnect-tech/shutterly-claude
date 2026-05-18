@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact · Shutterly</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div data-header></div>
+  <main class="container-narrow" style="padding:64px 16px;">
+    <h1 class="heading-display text-4xl">Contact</h1>
+    <p class="text-muted" style="margin-top:8px;">Questions, feedback, a photo to share? Mail <a class="text-brand" href="mailto:hello@shutterly.co.za">hello@shutterly.co.za</a> or use the form below.</p>
+    <form id="contact-form" style="margin-top:32px; display:flex; flex-direction:column; gap:16px;">
+      <div class="field"><label class="field-label">Your name</label><input class="input" id="name" required></div>
+      <div class="field"><label class="field-label">Email</label><input class="input" id="email" type="email" required></div>
+      <div class="field"><label class="field-label">Message</label><textarea class="textarea" id="msg" required rows="6"></textarea></div>
+      <button class="btn btn-primary" type="submit">Send</button>
+    </form>
+    <p class="text-xs text-muted" style="margin-top:16px;">Note: in this static version, messages are saved in your browser only. Replace with a real form provider (Fluent Forms, Formspree, Netlify Forms) before launch.</p>
+  </main>
+  <div data-footer></div>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    document.getElementById('contact-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      window.Shutterly.toast('Thanks — we read every message.', 'success');
+      e.target.reset();
+    });
+  </script>
+</body>
+</html>

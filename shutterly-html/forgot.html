@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Reset password · Shutterly</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div class="auth-split">
+    <aside class="auth-art">
+      <img src="https://images.unsplash.com/photo-1502920917128-1aa500764cbd?auto=format&fit=crop&w=1600&q=70" alt="">
+      <div class="auth-art-veil"></div>
+      <div class="auth-art-content">
+        <a href="index.html" class="logo" style="color:white;">
+          <span class="logo-mark">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="4"/><path d="M3 9a2 2 0 0 1 2-2h2l1.5-2.4A2 2 0 0 1 10.2 4h3.6a2 2 0 0 1 1.7.9L17 7h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"/></svg>
+          </span>
+          <span>Shutterly</span>
+        </a>
+      </div>
+    </aside>
+    <div style="display:flex; flex-direction:column;">
+      <header class="auth-top-bar">
+        <a href="index.html" class="logo">
+          <span class="logo-mark">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="4"/><path d="M3 9a2 2 0 0 1 2-2h2l1.5-2.4A2 2 0 0 1 10.2 4h3.6a2 2 0 0 1 1.7.9L17 7h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"/></svg>
+          </span>
+          <span>Shutter<span class="logo-text-accent">ly</span></span>
+        </a>
+      </header>
+      <div class="auth-content">
+        <div class="auth-content-inner">
+          <h1 class="heading-display text-3xl">Reset your password</h1>
+          <p class="text-sm text-muted" style="margin-top:8px;"><a class="text-brand" href="signin.html">← Sign in</a></p>
+          <div class="card" style="margin-top:24px; padding:18px; background:var(--muted); border-style:dashed;">
+            <p class="text-sm">Note: the static version of Shutterly stores accounts in your browser's localStorage. Password reset by email is not available here — switch to the Next.js + database version (see the Admin Wizard → Upgrade Path) for real email recovery.</p>
+          </div>
+          <form id="forgot-form" style="margin-top:24px; display:flex; flex-direction:column; gap:16px;">
+            <div class="field">
+              <label class="field-label">Email address</label>
+              <input class="input" id="email" type="email" required>
+            </div>
+            <button class="btn btn-primary" type="submit">Pretend to send reset link</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    document.getElementById('forgot-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      window.Shutterly.toast('Static demo — no email actually sent.', 'warning');
+    });
+  </script>
+</body>
+</html>

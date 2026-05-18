@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin · Shutterly</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div data-header></div>
+  <main class="container-wide" style="padding:48px 0;" id="admin-root"></main>
+  <div data-footer></div>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    (function () {
+      const session = window.Shutterly.Auth.getSession();
+      if (!session || (session.role !== 'ADMIN' && session.role !== 'SUPERADMIN')) {
+        location.href = 'dashboard.html'; return;
+      }
+      const root = document.getElementById('admin-root');
+      const wizard = JSON.parse(localStorage.getItem('shutterly:wizard') || '{}');
+      const totalSteps = window.SHUTTERLY_DATA.wizardSteps.length;
+      const cur = wizard.currentStep || 0;
+      const pct = Math.round((cur / Math.max(1, totalSteps - 1)) * 100);
+      const users = JSON.parse(localStorage.getItem('shutterly:users') || '[]').length;
+      const submissions = window.Shutterly.Submissions.all().length;
+
+      root.innerHTML = `
+        <h1 class="heading-display text-3xl">Welcome, admin.</h1>
+        <p class="text-muted" style="margin-top:8px;">A bird's-eye view of your Shutterly install.</p>
+
+        ${!wizard.completed ? `
+          <div class="card" style="margin-top:24px; border-color:var(--brand-300);">
+            <div class="card-content">
+              <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:16px;">
+                <div>
+                  <span class="badge badge-brand">${window.Shutterly.ICONS.sparkles} Launch wizard</span>
+                  <h2 class="heading-display text-2xl" style="margin-top:8px;">Finish your setup</h2>
+                  <p class="text-sm text-muted" style="margin-top:4px;">Step ${cur} of ${totalSteps} · ${pct}% complete</p>
+                </div>
+                <a class="btn btn-primary" href="admin-wizard.html">Resume →</a>
+              </div>
+              <div class="progress" style="margin-top:16px;"><div class="progress-bar" style="width:${pct}%"></div></div>
+            </div>
+          </div>` : `
+          <div class="card" style="margin-top:24px;">
+            <div class="card-content">
+              <span class="badge badge-success">✓ Setup complete</span>
+              <p style="margin-top:8px;" class="text-sm">You can re-open the wizard any time.</p>
+              <a class="btn btn-outline btn-sm" style="margin-top:8px;" href="admin-wizard.html">Re-open wizard</a>
+            </div>
+          </div>`}
+
+        <div class="grid sm:grid-cols-3 gap-4" style="margin-top:24px;">
+          ${stat('👥', 'Students', users)}
+          ${stat('📚', 'Courses', window.SHUTTERLY_DATA.courses.length)}
+          ${stat('🖼', 'Submissions', submissions)}
+        </div>
+
+        <div class="card" style="margin-top:24px;">
+          <div class="card-header">
+            <h3 class="card-title">Quick links</h3>
+            <p class="card-description">The pages you'll use day-to-day.</p>
+          </div>
+          <div class="card-content">
+            <ul class="grid sm:grid-cols-2 gap-2" style="font-size:14px;">
+              ${[
+                ['admin-wizard.html', 'Re-open setup wizard'],
+                ['courses.html', 'View courses'],
+                ['challenges.html', 'View challenges'],
+                ['gallery.html', 'Public gallery'],
+                ['settings.html', 'Site settings']
+              ].map(([h, l]) => `<li><a class="card" style="padding:10px 14px; display:flex; justify-content:space-between;" href="${h}"><span>${l}</span><span class="text-muted">→</span></a></li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      `;
+
+      function stat(emoji, label, value) {
+        return `
+          <div class="card">
+            <div class="card-content" style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <p class="text-xs uppercase tracking-wider text-muted">${label}</p>
+                <p class="heading-display text-2xl" style="margin-top:4px;">${value}</p>
+              </div>
+              <span style="font-size:24px;">${emoji}</span>
+            </div>
+          </div>`;
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Challenges · Shutterly</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div data-header></div>
+  <main class="container-wide" style="padding:48px 0;">
+    <h1 class="heading-display text-4xl" id="page-title"></h1>
+    <p class="text-muted" style="margin-top:8px;" id="page-sub"></p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" style="margin-top:32px;" id="challenge-grid"></div>
+  </main>
+  <div data-footer></div>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    const t = (k) => window.Shutterly.Locale.t(k);
+    const locale = window.Shutterly.Locale.get();
+    document.getElementById('page-title').textContent = t('challenges.title');
+    document.getElementById('page-sub').textContent = t('challenges.subtitle');
+    const grid = document.getElementById('challenge-grid');
+    window.SHUTTERLY_DATA.challenges.forEach(c => {
+      grid.innerHTML += `
+        <div class="card">
+          <div class="card-content">
+            <div class="flex justify-between items-center">
+              <span class="badge ${c.cadence === 'featured' ? 'badge-accent' : 'badge-brand'}">${c.cadence}</span>
+              <span class="text-xs text-muted">📅 ${c.daysOpen} days open</span>
+            </div>
+            <h2 class="heading-display text-xl" style="margin-top:12px;">${c.title[locale]}</h2>
+            <p class="text-sm text-muted" style="margin-top:8px;">${c.brief[locale]}</p>
+            <a class="text-sm text-brand" href="challenge.html?slug=${c.slug}" style="margin-top:12px; display:inline-block;">${t('challenges.viewBrief')} →</a>
+          </div>
+        </div>`;
+    });
+  </script>
+</body>
+</html>

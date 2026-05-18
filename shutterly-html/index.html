@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shutterly — Photography, the South African way.</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A free, modern photography learning platform with story-first lessons, interactive simulators, weekly challenges and a South African heart.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div data-header></div>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container-wide" style="display:grid; gap:48px; padding-block:64px; grid-template-columns:1fr;" id="hero-grid">
+        <div>
+          <span class="badge badge-brand" id="hero-tag"></span>
+          <h1 class="heading-display text-6xl" style="margin-top:16px;" id="hero-title"></h1>
+          <p class="text-lg text-muted" style="margin-top:18px; max-width:520px;" id="hero-blurb"></p>
+          <div class="flex flex-wrap gap-3" style="margin-top:28px;">
+            <a class="btn btn-primary btn-lg" href="signup.html" id="hero-cta-1"></a>
+            <a class="btn btn-outline btn-lg" href="courses.html" id="hero-cta-2"></a>
+          </div>
+          <p class="text-sm text-muted" style="margin-top:14px;" id="hero-trust"></p>
+          <div class="flex flex-wrap gap-6 text-xs text-muted" style="margin-top:32px;">
+            <span class="flex items-center gap-2"><span class="dot" style="background:var(--success)"></span>8 modules</span>
+            <span class="flex items-center gap-2"><span class="dot" style="background:var(--success)"></span>30+ lessons</span>
+            <span class="flex items-center gap-2"><span class="dot" style="background:var(--success)"></span>Weekly briefs</span>
+            <span class="flex items-center gap-2"><span class="dot" style="background:var(--success)"></span>EN / AF</span>
+          </div>
+        </div>
+        <div class="hero-cards">
+          <div class="hero-card" style="left:10%; top:4%; --r:-6deg; transform:rotate(-6deg); z-index:30;">
+            <img src="https://images.unsplash.com/photo-1502920917128-1aa500764cbd?auto=format&fit=crop&w=900&q=70" alt="">
+            <div class="hero-card-label">Lesson 1</div>
+          </div>
+          <div class="hero-card" style="left:45%; top:12%; --r:4deg; transform:rotate(4deg); z-index:20; animation-delay:0.6s;">
+            <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=70" alt="">
+            <div class="hero-card-label">Lesson 2</div>
+          </div>
+          <div class="hero-card" style="left:20%; top:40%; --r:-2deg; transform:rotate(-2deg); z-index:10; animation-delay:1.2s;">
+            <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=70" alt="">
+            <div class="hero-card-label">Lesson 3</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="border-t border-b" style="background:color-mix(in oklab, var(--muted), transparent 60%); padding:80px 0;">
+      <div class="container-wide">
+        <h2 class="heading-display text-4xl" id="features-title"></h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" style="margin-top:40px;" id="features-grid"></div>
+      </div>
+    </section>
+
+    <!-- MODULES -->
+    <section class="container-wide" style="padding:80px 0;">
+      <div class="flex items-end justify-between flex-wrap gap-6">
+        <div>
+          <h2 class="heading-display text-4xl" id="modules-title"></h2>
+          <p class="text-muted" style="margin-top:12px; max-width:480px;" id="modules-sub"></p>
+        </div>
+        <a class="btn btn-outline" href="courses.html">View full curriculum →</a>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" style="margin-top:40px;" id="modules-grid"></div>
+    </section>
+
+    <!-- TESTIMONIAL -->
+    <section class="border-t border-b" style="background:color-mix(in oklab, var(--muted), transparent 60%); padding:80px 0;">
+      <div class="container-wide grid sm:grid-cols-2 gap-8 items-center">
+        <div>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="var(--brand-500)"><path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 0 1-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179zm10 0C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 0 1-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179z"/></svg>
+          <p class="heading-display text-3xl" style="margin-top:12px; line-height:1.2;">
+            "I've done six photography courses before. Shutterly is the first that taught me to <em class="text-brand">see</em> instead of to <em>set</em>."
+          </p>
+          <p class="text-sm text-muted" style="margin-top:16px;">— Tumi N., wedding photographer, Pretoria</p>
+        </div>
+        <div class="card">
+          <div class="card-content">
+            <h3 class="heading-display text-xl">What's inside</h3>
+            <ul style="margin-top:12px; display:flex; flex-direction:column; gap:8px; font-size:14px;" id="inside-list"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="container-wide text-center" style="padding:96px 0;">
+      <h2 class="heading-display text-5xl mx-auto" style="max-width:680px;" id="final-title"></h2>
+      <p class="text-muted mx-auto" style="margin-top:16px; max-width:520px;" id="final-body"></p>
+      <div class="flex flex-wrap justify-center gap-3" style="margin-top:32px;">
+        <a class="btn btn-primary btn-lg" href="signup.html" id="final-cta-1"></a>
+        <a class="btn btn-outline btn-lg" href="courses.html" id="final-cta-2"></a>
+      </div>
+    </section>
+  </main>
+
+  <div data-footer></div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    (function () {
+      const t = (k) => window.Shutterly.Locale.t(k);
+      const locale = window.Shutterly.Locale.get();
+
+      document.getElementById('hero-tag').innerHTML = window.Shutterly.ICONS.sparkles + ' ' + t('common.freeForever');
+      document.getElementById('hero-title').textContent = t('brand.tagline');
+      document.getElementById('hero-blurb').textContent = t('brand.blurb');
+      document.getElementById('hero-cta-1').innerHTML = t('marketing.heroCtaPrimary') + ' ' + window.Shutterly.ICONS.arrowRight;
+      document.getElementById('hero-cta-2').textContent = t('marketing.heroCtaSecondary');
+      document.getElementById('hero-trust').textContent = t('marketing.trustline');
+
+      document.getElementById('features-title').textContent = t('marketing.featureTitle');
+      const fGrid = document.getElementById('features-grid');
+      const features = [
+        { icon: window.Shutterly.ICONS.sparkles, k: 'feature1' },
+        { icon: window.Shutterly.ICONS.camera, k: 'feature2' },
+        { icon: window.Shutterly.ICONS.compass, k: 'feature3' },
+        { icon: window.Shutterly.ICONS.trophy, k: 'feature4' }
+      ];
+      features.forEach(f => {
+        fGrid.innerHTML += `
+          <div class="card card-hover">
+            <div class="card-content">
+              <div style="color: var(--brand-500);">${f.icon}</div>
+              <h3 class="heading-display text-lg" style="margin-top:12px;">${t('marketing.' + f.k + 'Title')}</h3>
+              <p class="text-sm text-muted" style="margin-top:8px;">${t('marketing.' + f.k + 'Body')}</p>
+            </div>
+          </div>`;
+      });
+
+      document.getElementById('modules-title').textContent = t('marketing.modulesTitle');
+      document.getElementById('modules-sub').textContent = t('marketing.modulesSubtitle');
+      const mGrid = document.getElementById('modules-grid');
+      const course = window.SHUTTERLY_DATA.courses[0];
+      course.modules.forEach((m, i) => {
+        mGrid.innerHTML += `
+          <div class="card card-hover" style="position:relative; overflow:hidden;">
+            <div style="position:absolute; left:0; right:0; top:0; height:3px; background: linear-gradient(to right, var(--brand-400), var(--brand-600));"></div>
+            <div class="card-content">
+              <span class="badge badge-brand">${String(i + 1).padStart(2, '0')}</span>
+              <h3 class="heading-display text-lg leading-tight" style="margin-top:12px;">${m.title[locale]}</h3>
+              <p class="text-sm text-muted line-clamp-3" style="margin-top:8px;">${m.summary[locale]}</p>
+              <p class="text-xs text-muted" style="margin-top:16px;">${m.lessons.length} lessons</p>
+            </div>
+          </div>`;
+      });
+
+      const insideList = document.getElementById('inside-list');
+      [
+        'Interactive exposure, aperture, shutter and ISO simulators',
+        'Before/after editing comparisons on every editing lesson',
+        'A weekly photo challenge with a student gallery',
+        'Bilingual lessons (English + Afrikaans), side by side',
+        'Mobile-friendly, light + dark mode',
+        'Drops into any host — no Node, no database required'
+      ].forEach(line => {
+        insideList.innerHTML += `<li class="flex gap-2"><span style="color:var(--success); flex-shrink:0;">✓</span><span>${line}</span></li>`;
+      });
+
+      document.getElementById('final-title').textContent = t('marketing.finalCtaTitle');
+      document.getElementById('final-body').textContent = t('marketing.finalCtaBody');
+      document.getElementById('final-cta-1').innerHTML = t('marketing.heroCtaPrimary') + ' ' + window.Shutterly.ICONS.arrowRight;
+      document.getElementById('final-cta-2').textContent = t('marketing.heroCtaSecondary');
+
+      // Apply two-column hero layout above 768px
+      if (window.innerWidth >= 768) {
+        document.getElementById('hero-grid').style.gridTemplateColumns = '1fr 1fr';
+      }
+    })();
+  </script>
+</body>
+</html>

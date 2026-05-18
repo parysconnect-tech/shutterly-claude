@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Courses · Shutterly</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div data-header></div>
+  <main class="container-wide" style="padding:48px 0;">
+    <h1 class="heading-display text-4xl">Courses</h1>
+    <p class="text-muted" style="margin-top:8px;">Pick a course. Pick a frame. Show up next week.</p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" style="margin-top:40px;" id="courses-grid"></div>
+  </main>
+  <div data-footer></div>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    const locale = window.Shutterly.Locale.get();
+    const grid = document.getElementById('courses-grid');
+    window.SHUTTERLY_DATA.courses.forEach(c => {
+      const totalLessons = c.modules.reduce((a, m) => a + m.lessons.length, 0);
+      grid.innerHTML += `
+        <a href="course.html?slug=${c.slug}" class="card card-hover" style="overflow:hidden;">
+          <div style="aspect-ratio:16/10; background:var(--muted); position:relative;">
+            <img src="${c.coverImage}" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+          </div>
+          <div class="card-content">
+            <span class="badge badge-brand">${c.level}</span>
+            <h2 class="heading-display text-xl" style="margin-top:12px;">${c.title[locale]}</h2>
+            <p class="text-sm text-muted line-clamp-2" style="margin-top:6px;">${c.subtitle[locale]}</p>
+            <p class="text-xs text-muted" style="margin-top:14px;">${c.modules.length} modules · ${totalLessons} lessons</p>
+          </div>
+        </a>`;
+    });
+  </script>
+</body>
+</html>

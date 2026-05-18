@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Challenge · Shutterly</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <div data-header></div>
+  <main class="container-narrow" style="padding:48px 16px;" id="challenge-root"></main>
+  <div data-footer></div>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    (function () {
+      const params = new URLSearchParams(location.search);
+      const slug = params.get('slug');
+      const c = window.SHUTTERLY_DATA.challenges.find(x => x.slug === slug);
+      const root = document.getElementById('challenge-root');
+      if (!c) { root.innerHTML = '<h1 class="heading-display text-3xl">Challenge not found</h1>'; return; }
+      const locale = window.Shutterly.Locale.get();
+      const t = (k) => window.Shutterly.Locale.t(k);
+      root.innerHTML = `
+        <span class="badge badge-accent">${c.cadence}</span>
+        <h1 class="heading-display text-4xl" style="margin-top:12px;">${c.title[locale]}</h1>
+        <p class="text-muted" style="margin-top:12px;">${c.brief[locale]}</p>
+        <p class="text-xs text-muted" style="margin-top:8px;">📅 ${t('challenges.deadline')} in ${c.daysOpen} days</p>
+
+        <div class="card" style="margin-top:24px;">
+          <div class="card-content">
+            <h2 class="heading-display text-xl">${t('challenges.submit')}</h2>
+            <p class="text-sm text-muted" style="margin-top:4px;">${t('challenges.uploadHint')}</p>
+            <form id="upload-form" style="margin-top:16px;">
+              <div id="drop-zone" style="position:relative; aspect-ratio:4/3; cursor:pointer; border:2px dashed var(--border); background:color-mix(in oklab, var(--muted), transparent 60%); border-radius:18px; overflow:hidden;">
+                <div id="drop-empty" style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; color:var(--muted-fg);">
+                  ${window.Shutterly.ICONS.upload}
+                  <p class="text-sm font-medium">Click or drop a photo here</p>
+                  <p class="text-xs">JPG · PNG · WebP</p>
+                </div>
+                <img id="drop-preview" style="display:none; width:100%; height:100%; object-fit:cover;">
+                <input id="file-input" type="file" accept="image/jpeg,image/png,image/webp" style="display:none;">
+              </div>
+              <div class="field" style="margin-top:16px;">
+                <label class="field-label">${t('challenges.captionLabel')}</label>
+                <textarea id="caption" class="textarea" placeholder="The story behind the frame…"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width:100%; margin-top:16px;">📷 ${t('challenges.submit')}</button>
+            </form>
+          </div>
+        </div>
+      `;
+
+      const dz = document.getElementById('drop-zone');
+      const input = document.getElementById('file-input');
+      const preview = document.getElementById('drop-preview');
+      const empty = document.getElementById('drop-empty');
+      let dataUrl = null;
+      dz.addEventListener('click', () => input.click());
+      input.addEventListener('change', () => {
+        const f = input.files[0]; if (!f) return;
+        if (f.size > 2 * 1024 * 1024) { window.Shutterly.toast('Try a file under 2 MB in this static version.', 'warning'); return; }
+        const r = new FileReader();
+        r.onload = () => {
+          dataUrl = r.result;
+          preview.src = dataUrl; preview.style.display = 'block';
+          empty.style.display = 'none';
+        };
+        r.readAsDataURL(f);
+      });
+      document.getElementById('upload-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const session = window.Shutterly.Auth.getSession();
+        if (!session) { window.Shutterly.toast('Sign in to submit.', 'warning'); setTimeout(() => location.href = 'signin.html?next=' + encodeURIComponent(location.href), 800); return; }
+        if (!dataUrl) { window.Shutterly.toast('Pick a photo first.', 'warning'); return; }
+        try {
+          window.Shutterly.Submissions.add({
+            userId: session.userId, userName: session.name,
+            challengeSlug: c.slug,
+            caption: document.getElementById('caption').value,
+            dataUrl
+          });
+          window.Shutterly.toast(t('challenges.submitted'), 'success');
+          setTimeout(() => location.href = 'gallery.html', 800);
+        } catch (err) {
+          window.Shutterly.toast(err.message, 'error');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
