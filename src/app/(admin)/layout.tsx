@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import { Header } from '@/components/layout/Header';
-import { ShieldCheck, ListChecks, BookOpen, Trophy, Users, Settings } from 'lucide-react';
+import { ShieldCheck, ListChecks, BookOpen, Trophy, Users, Settings, Rocket } from 'lucide-react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const items = [
     { href: '/admin', icon: ShieldCheck, label: 'Overview' },
-    { href: '/admin/setup-wizard', icon: ListChecks, label: 'Launch wizard' },
+    { href: '/admin/launch', icon: Rocket, label: 'Launch checklist' },
+    { href: '/admin/setup-wizard', icon: ListChecks, label: 'Setup wizard' },
     { href: '/admin/courses', icon: BookOpen, label: 'Courses' },
     { href: '/admin/challenges', icon: Trophy, label: 'Challenges' },
     { href: '/admin/users', icon: Users, label: 'Users' },
