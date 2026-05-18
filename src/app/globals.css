@@ -63,10 +63,25 @@ html, body {
   }
 
   .prose-shutterly {
-   
-           prose-p:leading-relaxed prose-a:text-brand-600 hover:prose-a:text-brand-700
-           dark:prose-a:text-brand-300 dark:hover:prose-a:text-brand-200
-           prose-strong:text-foreground prose-li:my-1;
+    @apply leading-relaxed;
+  }
+  .prose-shutterly a {
+    @apply text-brand-600 transition-colors;
+  }
+  .prose-shutterly a:hover {
+    @apply text-brand-700;
+  }
+  .dark .prose-shutterly a {
+    @apply text-brand-300;
+  }
+  .dark .prose-shutterly a:hover {
+    @apply text-brand-200;
+  }
+  .prose-shutterly strong {
+    color: hsl(var(--foreground));
+  }
+  .prose-shutterly li {
+    @apply my-1;
   }
 
   .ring-focus {
