@@ -63,7 +63,7 @@ html, body {
   }
 
   .prose-shutterly {
-    @apply prose-headings:font-display prose-headings:tracking-tight
+    @apply prose-headings:tracking-tight
            prose-p:leading-relaxed prose-a:text-brand-600 hover:prose-a:text-brand-700
            dark:prose-a:text-brand-300 dark:hover:prose-a:text-brand-200
            prose-strong:text-foreground prose-li:my-1;
