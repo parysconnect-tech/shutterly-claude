@@ -58,12 +58,12 @@ html, body {
   .container-wide { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8; }
 
   .heading-display {
-    @apply font-display font-semibold tracking-tight;
+    @apply font-semibold tracking-tight;
     font-feature-settings: 'ss01', 'ss02';
   }
 
   .prose-shutterly {
-    @apply prose-headings:tracking-tight
+   
            prose-p:leading-relaxed prose-a:text-brand-600 hover:prose-a:text-brand-700
            dark:prose-a:text-brand-300 dark:hover:prose-a:text-brand-200
            prose-strong:text-foreground prose-li:my-1;
