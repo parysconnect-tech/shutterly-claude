@@ -355,3 +355,38 @@ model AdminWizardState {
   updatedAt   DateTime @updatedAt
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+// ---------- INBOX (contact form submissions) ----------
+
+model ContactSubmission {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  read      Boolean  @default(false)
+  archived  Boolean  @default(false)
+  // Light context
+  userAgent String?
+  referer   String?
+  createdAt DateTime @default(now())
+
+  @@index([read, createdAt])
+  @@index([archived])
+}
+
+// ---------- LIGHTWEIGHT ANALYTICS ----------
+
+model PageView {
+  id        String   @id @default(cuid())
+  path      String
+  referer   String?
+  country   String?
+  userId    String?
+  // Anonymous session token (hashed IP+UA) so we can count uniques without storing PII
+  visitorId String
+  createdAt DateTime @default(now())
+
+  @@index([path, createdAt])
+  @@index([createdAt])
+  @@index([visitorId])
+}

@@ -75,12 +75,14 @@ export default async function AdminHome() {
         <CardContent>
           <ul className="grid gap-2 sm:grid-cols-2">
             {[
-              ['/admin/setup-wizard', 'Re-open setup wizard'],
+              ['/admin/stats', 'Stats & page views'],
+              ['/admin/messages', 'Read messages'],
+              ['/admin/users', 'Users & roles'],
               ['/admin/courses', 'Manage courses'],
               ['/admin/challenges', 'Manage challenges'],
-              ['/admin/users', 'Users & roles'],
-              ['/admin/settings', 'Site settings'],
-              ['/gallery', 'Public gallery']
+              ['/admin/launch', 'Launch checklist'],
+              ['/admin/setup-wizard', 'Re-open setup wizard'],
+              ['/admin/settings', 'Site settings']
             ].map(([href, label]) => (
               <li key={href}>
                 <Link

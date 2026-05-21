@@ -7,6 +7,8 @@ import { Toaster } from 'sonner';
 import './globals.css';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { SessionProvider } from '@/components/providers/SessionProvider';
+import { PageViewTracker } from '@/components/analytics/PageViewTracker';
+import { SuperadminLauncher } from '@/components/admin/SuperadminLauncher';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -54,6 +56,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <SessionProvider>
               {children}
+              <PageViewTracker />
+              <SuperadminLauncher />
               <Toaster position="top-right" richColors closeButton />
             </SessionProvider>
           </ThemeProvider>

@@ -8,12 +8,26 @@ import { Input, Textarea, Field } from '@/components/ui/Input';
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    // For launch: wire this to your SMTP / Resend / Fluent Forms endpoint.
-    setSent(true);
-    toast.success('Thanks — we read every message.');
+    setSending(true);
+    try {
+      const r = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(data?.error || 'Could not send');
+      setSent(true);
+      toast.success('Thanks — we read every message.');
+    } catch (e: any) {
+      toast.error(e?.message ?? 'Could not send. Try again in a moment.');
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -24,7 +38,7 @@ export default function ContactPage() {
       </p>
       {sent ? (
         <p className="mt-8 rounded-2xl border border-border bg-muted/40 p-6 text-sm">
-          Message sent — we'll reply within a day or two.
+          Message sent — we&apos;ll reply within a day or two.
         </p>
       ) : (
         <form onSubmit={onSubmit} className="mt-8 space-y-4">
@@ -37,7 +51,9 @@ export default function ContactPage() {
           <Field label="Message">
             <Textarea value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} required rows={6} />
           </Field>
-          <Button type="submit">Send</Button>
+          <Button type="submit" disabled={sending}>
+            {sending ? 'Sending…' : 'Send'}
+          </Button>
         </form>
       )}
     </div>
