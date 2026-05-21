@@ -288,5 +288,5 @@ function Kpi({
 function flagFor(country: string | null | undefined) {
   if (!country || country.length !== 2) return '🌍';
   const base = 127397;
-  return String.fromCodePoint(...[...country.toUpperCase()].map((c) => base + c.charCodeAt(0)));
+  return String.fromCodePoint(...country.toUpperCase().split('').map((c) => base + c.charCodeAt(0)));
 }
