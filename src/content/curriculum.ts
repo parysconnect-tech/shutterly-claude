@@ -7,6 +7,11 @@ export type Lesson = {
   title: { en: string; af: string };
   summary: { en: string; af: string };
   durationMin: number;
+  // Optional hero image. Drop a file at /public/lessons/{slug}/hero.jpg to use it.
+  // If the file is missing, the page falls back to a generated gradient.
+  heroImage?: string;
+  // Optional photo credit / description shown over the hero gradient.
+  heroCaption?: string;
   interactive?:
     | 'exposure-triangle'
     | 'aperture-sim'
@@ -86,16 +91,24 @@ export const courses: Course[] = [
               af: 'Sag teenoor hard, rigting, kleur en hoe ‘n Kaapse oggend van ‘n Kalahari-middag verskil.'
             },
             durationMin: 9,
+            heroImage: '/lessons/reading-light/hero.jpg',
+            heroCaption: 'Golden hour spilling across Table Mountain — soft, directional, warm.',
             body: {
               en: `Most beginners ask "what setting?" The honest answer almost always is: "look at the light first." This lesson teaches you to walk into a room or a landscape and read four properties before you raise the camera.
+
+![A Karoo morning — hard, direct sun carving the koppies into sharp triangles of light and shadow](/lessons/reading-light/karoo-morning.jpg)
 
 **Quality** — is the light hard (small source, sharp shadows, high contrast) or soft (large source, gentle edges)? Midday sun on a Karoo plain is hard; an overcast Cape morning is soft.
 
 **Direction** — front-light flattens, side-light sculpts, back-light makes silhouettes and rim-glows. Walk a half circle around your subject before you decide.
 
+[[diagram:light-direction]]
+
 **Colour** — early and late light is warm; midday is neutral-cool; tungsten globes are orange; fluorescents are green. Your camera's white balance only matters once you know what the light is.
 
 **Intensity** — how much light is there? This decides whether you need a wide aperture or a still subject.
+
+[[pullquote: "Photography is painting with light. First, learn to see the paint." — old studio saying]]
 
 Try this: spend ten minutes today watching the light in a single room as the sun moves. Don't shoot. Just watch.`,
               af: `Die meeste beginners vra "watter instelling?" Die eerlike antwoord is byna altyd: "kyk eers na die lig." Hierdie les leer jou om ‘n vertrek of landskap binne te stap en vier eienskappe te lees voor jy die kamera oplig.
@@ -151,13 +164,19 @@ Probeer dit: spandeer vandag tien minute en kyk hoe die lig in een vertrek bewee
               af: 'Onderwerp, agtergrond, rande. Die vier-vrae voor-foto gewoonte.'
             },
             durationMin: 7,
+            heroImage: '/lessons/finding-the-frame/hero.jpg',
+            heroCaption: 'A single subject, a clean edge, a quiet background.',
             body: {
               en: `Before you press the shutter, ask four questions:
+
+[[diagram:four-questions]]
 
 1. **What is my subject?** If you can't say it in one sentence, neither can the photo.
 2. **What is in the background?** Backgrounds make or break frames more than subjects do.
 3. **Where are my edges?** Anything cropped at the edge becomes a visual snag.
 4. **What is the light doing?** (You already did the previous lesson.)
+
+![Same scene, two framings — left clutters the edges, right answers all four questions](/lessons/finding-the-frame/before-after.jpg)
 
 This is not a checklist to memorise — it's a habit to practise. Most weak photos have all four problems at once.`,
               af: `Voor jy die sluiter druk, vra vier vrae:
@@ -179,12 +198,20 @@ Dit is nie ‘n kontrolelys om te memoriseer nie — dit is ‘n gewoonte om te 
               af: 'Hoekom "goeie toerusting" ‘n strik is, en wat eerder om te doen.'
             },
             durationMin: 6,
+            heroImage: '/lessons/mindset-of-a-maker/hero.jpg',
+            heroCaption: 'A working camera. Scuffed, used, loved.',
             body: {
-              en: `A pro photographer's secret is not their lens. It is that they shoot constantly, with constraint, with intent — and then look at what they made. The fastest growth comes from three habits:
+              en: `A pro photographer's secret is not their lens. It is that they shoot constantly, with constraint, with intent — and then look at what they made.
+
+[[pullquote: "Your first ten thousand photographs are your worst." — Henri Cartier-Bresson]]
+
+The fastest growth comes from three habits:
 
 - **Shoot weekly with one fixed lens.** Constraint breeds composition.
 - **Edit ruthlessly.** Keep one frame in twenty. Show fewer photos that are better.
 - **Print one a month.** A print teaches your eye like nothing on a screen ever will.
+
+![A wall of printed work — what your year looks like when you print one a month](/lessons/mindset-of-a-maker/print-wall.jpg)
 
 This module sets up the way of seeing that the rest of Shutterly is built on.`,
               af: `‘n Profesionele fotograaf se geheim is nie hul lens nie. Dit is dat hulle gedurig skiet, met beperking, met opset — en dan kyk wat hulle gemaak het. Die vinnigste groei kom van drie gewoontes:
@@ -215,8 +242,12 @@ Hierdie module lê die manier van sien waarop die res van Shutterly gebou is.`
             },
             durationMin: 10,
             interactive: 'exposure-triangle',
+            heroImage: '/lessons/exposure-triangle/hero.jpg',
+            heroCaption: 'Three dials, one exposure. Aperture · Shutter · ISO.',
             body: {
               en: `Three dials control how much light hits the sensor and what the image looks like:
+
+[[diagram:exposure-triangle]]
 
 - **Aperture (f-stop)** — how wide the lens is open. Affects depth of field.
 - **Shutter speed** — how long the sensor is exposed. Affects motion.
@@ -241,8 +272,14 @@ Vergroôt een met ‘n stop en die beeld is twee keer so helder; verklein ‘n a
             },
             durationMin: 8,
             interactive: 'aperture-sim',
+            heroImage: '/lessons/aperture-depth/hero.jpg',
+            heroCaption: 'Eyes sharp, ears soft — the signature look of a wide aperture.',
             body: {
               en: `A wide aperture (f/1.8) gives a tiny zone of sharpness and a creamy background. A narrow aperture (f/11) keeps a whole scene crisp. The wide-open photo is not always the better one — wedding readers want to see both bride and groom; a Drakensberg vista needs every ridge sharp.
+
+[[diagram:depth-of-field]]
+
+![The same portrait at f/1.8 and f/8 — notice how the background reads completely differently](/lessons/aperture-depth/comparison.jpg)
 
 Use the simulator to feel how depth of field collapses as the f-number drops.`,
               af: `‘n Wye diafragma (f/1.8) gee ‘n klein skerpsone en ‘n romerige agtergrond. ‘n Nou diafragma (f/11) hou ‘n hele toneel skerp. Die wyd-oop foto is nie altyd die beter een nie — trougaste wil bruid en bruidegom sien; ‘n Drakensberg-uitsig benodig elke rant skerp.
@@ -259,8 +296,12 @@ Gebruik die simulator om te voel hoe velddiepte ineenstort soos die f-nommer val
             },
             durationMin: 9,
             interactive: 'shutter-sim',
+            heroImage: '/lessons/shutter-motion/hero.jpg',
+            heroCaption: 'A long exposure of waves at Cape Point — silk where there were once peaks.',
             body: {
               en: `Shutter speed is the most expressive dial on the camera. At 1/2000s you freeze a wave at Muizenberg; at 1/8s you blur a Joburg taxi to a streak; at 1/30s while panning a cyclist, the rider is sharp and the world is racing past them.
+
+[[diagram:shutter-stories]]
 
 Each speed tells a different story. The simulator on this page shows the same scene three ways.`,
               af: `Sluiterspoed is die mees ekspressiewe knoppie op die kamera. By 1/2000s vries jy ‘n golf by Muizenberg; by 1/8s vervaag jy ‘n Johannesburgse taxi tot ‘n streep; by 1/30s terwyl jy ‘n fietsryer pan, is die ryer skerp en die wêreld jaag verby hulle.
@@ -291,8 +332,16 @@ Elke spoed vertel ‘n ander storie. Die simulator op hierdie bladsy wys dieself
             },
             durationMin: 6,
             interactive: 'histogram-reader',
+            heroImage: '/lessons/reading-the-histogram/hero.jpg',
+            heroCaption: 'The back of a camera tells two stories — picture, and graph.',
             body: {
-              en: `Camera screens lie. A photo can look perfect in a dark gallery and be hopelessly blown out in daylight. The histogram tells the truth: tones from black on the left to white on the right. If pixels are stacked against the right wall you've lost detail. Against the left, the shadows are crushed.
+              en: `Camera screens lie. A photo can look perfect in a dark gallery and be hopelessly blown out in daylight. The histogram tells the truth: tones from black on the left to white on the right.
+
+[[diagram:histogram-zones]]
+
+If pixels are stacked against the right wall you've lost detail. Against the left, the shadows are crushed.
+
+[[pullquote: "The histogram is the only honest critic in the field." — Anonymous wedding photographer]]
 
 Glance at the histogram every time. Trust it more than the rear screen.`,
               af: `Kamera skerms lieg. ‘n Foto kan in ‘n donker galery perfek lyk en in dagsonlig hopeloos uitgewas wees. Die histogram vertel die waarheid: tone van swart aan die linkerkant tot wit aan die regterkant. As piksels teen die regter muur stapel, het jy detail verloor. Teen die linker is die skaduwees gepletter.
@@ -319,13 +368,21 @@ Kyk elke keer na die histogram. Vertrou dit meer as die agterskerm.`
             },
             durationMin: 8,
             interactive: 'composition-overlay',
+            heroImage: '/lessons/beyond-thirds/hero.jpg',
+            heroCaption: 'A single tree on the right third, horizon on the lower third.',
             body: {
-              en: `The rule of thirds works because human eyes track to the intersection points of a 3×3 grid. But it's a starting line, not a finish. Try four habits that go beyond it:
+              en: `The rule of thirds works because human eyes track to the intersection points of a 3×3 grid. But it's a starting line, not a finish.
+
+[[diagram:rule-of-thirds]]
+
+Try four habits that go beyond it:
 
 1. **Negative space** — empty room around the subject says "alone" or "vast."
 2. **Leading lines** — fences, roads, jet trails — bring the eye in.
 3. **Layers** — foreground, mid, background. Three depths feel three-dimensional.
 4. **Triangles** — three subjects in a triangle is the most stable shape we know.
+
+![Layers in action — three depth planes in a single Drakensberg frame](/lessons/beyond-thirds/layers.jpg)
 
 The composition overlay tool on this page lets you switch grids on any photo you upload.`,
               af: `Die reël van derdes werk omdat menslike oë na die snypunte van ‘n 3×3 rooster spoor. Maar dit is ‘n beginlyn, nie ‘n eindstreep nie. Probeer vier gewoontes wat verder gaan:
@@ -408,8 +465,14 @@ Kyk hoe ‘n enkele warm trui teen ‘n koue Storms-rivier agtergrond ‘n hele 
               af: 'Wanneer om die wekker te stel, en waarna om te kyk as jy daar is.'
             },
             durationMin: 8,
+            heroImage: '/lessons/golden-and-blue-hour/hero.jpg',
+            heroCaption: 'Camps Bay at the last gasp of golden hour, before the blue takes over.',
             body: {
               en: `Golden hour — roughly the hour after sunrise and before sunset — gives you long shadows, warm tones and side-light that sculpts faces and landscapes. Blue hour is the half-hour before sunrise and after sunset, when the sky is rich indigo and city lights start to glow.
+
+[[diagram:golden-hour-clock]]
+
+![Same vista, fifteen minutes apart — golden then blue](/lessons/golden-and-blue-hour/comparison.jpg)
 
 Plan with the SunCalc app. Get there fifteen minutes early. Stay fifteen minutes longer than you want to.`,
               af: `Gulde uur — ongeveer die uur na sonsopkoms en voor sonsondergang — gee jou lang skaduwees, warm tone en sylig wat gesigte en landskappe beeldhou. Blou uur is die half-uur voor sonsopkoms en na sonsondergang, wanneer die lug ryk indigo is en stadsligte begin gloei.
@@ -425,14 +488,20 @@ Beplan met die SunCalc-app. Kom vyftien minute vroeë r. Bly vyftien minute lang
               af: '‘n Enkele speedlight of LED kan ‘n hele skoot dra. Drie plasings wat altyd werk.'
             },
             durationMin: 9,
+            heroImage: '/lessons/one-light-setups/hero.jpg',
+            heroCaption: 'A single Godox speedlight, modified with a $5 paper diffuser.',
             body: {
               en: `Three patterns to memorise:
+
+[[diagram:one-light-setups]]
 
 1. **45-up, 45-side** (Rembrandt) — a triangle of light on the far cheek.
 2. **Backlight + reflector** — the cheap recipe for cinematic portraits.
 3. **Off-camera, low and to the side** — for moody product shots and food.
 
-Move the light, not the camera.`,
+[[pullquote: "Move the light, not the camera." — every lighting workshop, ever]]
+
+The position of the light tells most of the story — start with one of these three and adjust by feel.`,
               af: `Drie patrone om te memoriseer:
 
 1. **45-op, 45-sy** (Rembrandt) — ‘n driehoek lig op die ver wang.

@@ -10,6 +10,7 @@ import { Quiz } from '@/components/learning/Quiz';
 import { MarkComplete } from '@/components/learning/MarkComplete';
 import { InteractiveByKey } from '@/components/interactive/InteractiveByKey';
 import { ReadingProgress } from '@/components/learning/ReadingProgress';
+import { LessonHero } from '@/components/learning/LessonHero';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -72,7 +73,14 @@ export default async function LessonPage({
             </p>
           </header>
 
-          <div className="prose prose-shutterly mt-10 max-w-none text-[17px] leading-relaxed">
+          <LessonHero
+            src={lesson.heroImage}
+            caption={lesson.heroCaption}
+            seed={`${course.slug}-${module.slug}-${lesson.slug}`}
+            title={lesson.title[locale]}
+          />
+
+          <div className="prose prose-shutterly mt-8 max-w-none">
             <LessonBody markdown={lesson.body[locale]} />
           </div>
 
